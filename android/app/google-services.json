@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "808633921473",
+    "project_id": "eatmates-chat",
+    "storage_bucket": "eatmates-chat.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:808633921473:android:e5beefac13a014c2040940",
+        "android_client_info": {
+          "package_name": "com.chat_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "808633921473-621j35brfuisk0hcneimihejbuoekegt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDe3xyZgmo5HrnrRxMfeIiJ4S_mwLnq15M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "808633921473-621j35brfuisk0hcneimihejbuoekegt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
