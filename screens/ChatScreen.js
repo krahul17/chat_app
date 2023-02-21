@@ -5,6 +5,7 @@ import firestore from '@react-native-firebase/firestore'
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import storage from '@react-native-firebase/storage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ImageCropPicker from 'react-native-image-crop-picker';
 
 
 export default function ChatScreen({ user, route }) {
@@ -13,6 +14,7 @@ export default function ChatScreen({ user, route }) {
 
   const [imageData, setImageData] = useState(null);
   const [imageUrl, setImageUrl] = useState('');
+  const [showoption, setShowoption] = useState(false)
 
   const { uid, name } = route.params;
 
@@ -34,8 +36,9 @@ export default function ChatScreen({ user, route }) {
 
 
   }
+
+
   useEffect(() => {
-    // getAllMessages()
 
     const docid = uid > user.uid ? user.uid + "-" + uid : uid + "-" + user.uid
     const messageRef = firestore().collection('chatrooms')
@@ -105,6 +108,9 @@ export default function ChatScreen({ user, route }) {
     setImageData(null);
   }
 
+ 
+
+
   const openCamera = async () => {
     const result = await launchImageLibrary({ mediaType: 'photo' });
     console.log(result, '999999999');
@@ -112,16 +118,38 @@ export default function ChatScreen({ user, route }) {
     } else {
       setImageData(result);
       uplaodImage(result);
+      //  setImageUrl(result.assets[0].fileName);
     }
   };
+
   const uplaodImage = async imageDataa => {
-    const reference = storage().ref(imageDataa.assets[0].fileName);
-    const pathToFile = imageData.assets[0].uri;
-    await reference.putFile(pathToFile);
-    const url = await storage().ref(imageData.assets[0].fileName).getDownloadURL();
-    console.log('000url', url);
-    setImageUrl(url);
+
+    
+
+    const img = imageDataa.assets[0];
+    console.log()
+
+    const uploadTask = storage().ref().child(`/messageimages/${Date.now()}`).putFile(img.uri)
+    uploadTask.on('state_changed',
+      (snapshot) => {
+
+        var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        // if (progress == 100) alert('image uploaded')
+
+      },
+      (error) => {
+        alert("error uploading image")
+      },
+      () => {
+        uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+          setImageUrl(downloadURL)
+        });
+      }
+    );
+
+
   };
+
   return (
     <>
       <StatusBar barStyle="light-content" backgroundColor={'#000'} />
@@ -129,8 +157,9 @@ export default function ChatScreen({ user, route }) {
         <GiftedChat
           messages={messages}
           alwaysShowSend
-          // onSend={text => onSend(text)}
-          onSend={messages => onSend(messages)}
+          showAvatarForEveryMessage={true}
+          onSend={text => onSend(text)}
+          // onSend={messages => onSend(messages)}
           user={{
             _id: user.uid,
             name: name
@@ -159,23 +188,28 @@ export default function ChatScreen({ user, route }) {
                 {imageUrl !== '' ? (
 
                   <View>
-                    <Image source={{ uri: imageData.assets[0].uri }} style={styles.imggh} />
+                    <Image source={{ uri: imageData.assets[0].uri }} style={styles.imggh3} />
                     <TouchableOpacity
                       onPress={() => {
                         setImageUrl('');
                       }}>
                       <Image
-                        source={require('../assets/download.png')}
-                        style={{ width: 16, height: 16, tintColor: '#fff' }}
+                        source={require('../assets/close.png') } style={{height:12, width:12,marginTop:-31,marginLeft:-6}}
+                      
                       />
                     </TouchableOpacity>
+
                   </View>)
                   :
-                  null}
-
-                <TouchableOpacity onPress={() => { openCamera() }}>
-                  <Image source={require('../assets/plus.png')} style={styles.imggh} />
+                  <TouchableOpacity onPress={() => { openCamera() }}>
+                  <Image source={require('../assets/gallry.png')} style={styles.imggh} />
                 </TouchableOpacity>
+
+                  }
+
+                {/* <TouchableOpacity onPress={() => { openCamera() }}>
+                  <Image source={require('../assets/gallry.png')} style={styles.imggh} />
+                </TouchableOpacity> */}
 
                 <Send {...props} containerStyle={{ justifyContent: 'center', marginLeft: 15 }}>
 
@@ -206,14 +240,22 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   imggh: {
-    height: 20,
-    width: 20,
+    height: 24,
+    width: 24,
+    borderRadius:3
     // marginLeft:-30,
     // marginBottom:5
   },
+  imggh3: {
+    height: 24,
+    width: 24,
+    borderRadius:3,
+    // marginRight:10,
+    marginTop:3
+  },
   imggh2: {
-    height: 20,
-    width: 20,
+    height: 24,
+    width: 24,
     marginRight: 10,
   }
 

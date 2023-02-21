@@ -21,7 +21,7 @@ export default function AccountScreen({user}) {
             <Image style={styles.img} source={{uri:profile.pic}} />
             <Text style={styles.text}>Name - {profile.name}</Text>
             <View style={{flexDirection:"row"}}>
-                <Feather name="mail" size={30} color="white" />
+                {/* <Feather name="mail" size={30} color="white" /> */}
                 <Text style={[styles.text,{marginLeft:10}]}>{profile.email}</Text>
             </View>
             <Button
@@ -45,7 +45,7 @@ export default function AccountScreen({user}) {
 const styles = StyleSheet.create({
     container:{
         flex:1,
-        backgroundColor:"green",
+        backgroundColor:"#95DDFA",
         alignItems:"center",
         justifyContent:"space-evenly"
     },

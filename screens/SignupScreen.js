@@ -13,8 +13,7 @@ export default function SignupScreen({ navigation }) {
     const [password, setPassword] = useState('')
     const [image, setImage] = useState(null)
 
-    const [CompanyLogo, setCompanyLogo] = useState();
-    const [showoption, setShowoption] = useState(false)
+
 
     const [showNext, setShowNext] = useState(false)
     const [loading, setLoading] = useState(false)
